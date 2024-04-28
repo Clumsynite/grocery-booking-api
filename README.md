@@ -66,3 +66,22 @@ Your Express server should now be up and running at http://localhost:5000.
 - Organize your controllers and business logic in the **\`controllers\`** directory.
 - Store your data models in the **\`models\`** directory.
 - Add your application-specific middleware in the **\`middlewares\`** directory.
+
+
+## Knex
+
+### New Migration
+
+```bash
+npx knex --knexfile ./src/knexFile.ts migrate:make "migration-name" +x ts # new migration
+npx knex --knexfile ./src/knexFile.ts migrate:latest +x ts # Add all migrations to db
+npx knex --knexfile ./src/knexFile.ts migrate:down "filename.ts" # Remove Migration
+npx knex --knexfile ./src/knexFile.ts migrate:up "filename.ts" # Add Migration
+
+```
+
+### Seed
+
+```bash
+npx knex --knexfile ./src/knexFile.ts seed:run +x ts ## Add seed data to db
+```

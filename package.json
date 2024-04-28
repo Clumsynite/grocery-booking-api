@@ -9,8 +9,11 @@
     "prod": "npx tsc && node dist/server.js",
     "lint": "tsc --noEmit && eslint .",
     "lint-fix": "npx eslint . --fix",
-    "copy-files": "cp -r ./src/public ./dist && cp -r ./src/view ./dist"
-
+    "copy-files": "cp -r ./src/public ./dist && cp -r ./src/view ./dist",
+    "migrate": "npx knex --knexfile ./src/knexFile.ts migrate:latest +x ts",
+    "rollback": "npx knex --knexfile ./src/knexFile.ts migrate:rollback +x ts",
+    "seed": "npx knex --knexfile ./src/knexFile.ts seed:run +x ts",
+    "db-init": "npx knex --knexfile ./src/knexFile.ts migrate:latest +x ts && npx knex --knexfile ./src/knexFile.ts seed:run +x ts"
   },
   "keywords": [
     "typescript",
@@ -24,10 +27,12 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "joi": "^17.12.3",
+    "knex": "^3.1.0",
     "lodash": "^4.17.21",
     "memory-cache": "^0.2.0",
     "morgan": "^1.10.0",
     "morgan-json": "^1.1.0",
+    "pg": "^8.11.5",
     "showdown": "^2.1.0",
     "uuid": "^9.0.1",
     "winston": "^3.13.0"
