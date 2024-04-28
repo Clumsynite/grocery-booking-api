@@ -4,8 +4,10 @@ import logger from "./utils/logger";
 import app from "./app";
 
 import gracefulShutdown from "./utils/gracefulShutdown";
+import { migrate } from "./migrate";
 
 const server = app.listen(config.PORT, async () => {
+  await migrate();
   logger.info("Server Started", { port: config.PORT, requestId: "listen" });
 });
 

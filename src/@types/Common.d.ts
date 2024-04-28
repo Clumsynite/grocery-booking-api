@@ -21,3 +21,16 @@ export type order_status =
   | Status.OUT_FOR_DELIVERY
   | Status.DELIVERED
   | Status.RETURNED;
+
+export interface PaginationParams {
+  limit: number | null;
+  skip: number | null;
+  totalRecords?: boolean;
+  order?: "created_at" | "updated_at";
+  dir?: "desc" | "asc";
+  id?: string;
+  search?: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
+
+export type requestId = string | undefined;

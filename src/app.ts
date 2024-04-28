@@ -10,6 +10,7 @@ import morgan from "./middleware/morgan";
 import assignId from "./middleware/assignId";
 import healthRoute from "./routes/health";
 import logger from "./utils/logger";
+import routes from "./routes";
 
 import { Request } from "./@types/Express";
 
@@ -47,7 +48,6 @@ app.use(express.static("public"));
 app.use(assignId);
 app.use(morgan);
 
-
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "view"));
@@ -66,5 +66,7 @@ if (isFile) {
 }
 
 app.use("/health", healthRoute);
+
+app.use("/api", routes);
 
 export default app;

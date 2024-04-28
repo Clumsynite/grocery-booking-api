@@ -25,6 +25,11 @@ const amount = joi.number().positive().min(1).max(10000000).messages({
 const name = joi.string().min(3).max(25).pattern(regex.name);
 const address = joi.string().min(6).max(100).pattern(regex.address);
 
+const isDeleted = joi.object({
+  id: uuid.required(),
+  is_deleted: joi.boolean().required(),
+});
+
 export default {
   username,
   fullname,
@@ -36,4 +41,5 @@ export default {
   name,
   address,
   number,
+  isDeleted,
 };
