@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Basic Grocery Booking API",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && npm run copy-files",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "prod": "npx tsc && node dist/server.js",
     "lint": "tsc --noEmit && eslint .",
-    "lint-fix": "npx eslint . --fix"
+    "lint-fix": "npx eslint . --fix",
+    "copy-files": "cp -r ./src/public ./dist && cp -r ./src/view ./dist"
+
   },
   "keywords": [
     "typescript",
