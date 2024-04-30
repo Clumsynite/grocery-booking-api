@@ -74,7 +74,7 @@ export const updateAdmin = async (
   const query: Knex.QueryBuilder<Admin, Admin[]> = (trx || knex)<Admin>(tablename)
     .returning("*")
     .where(filter)
-    .update(update);
+    .update({ ...update, updated_at: knex.fn.now() });
   const result = await query;
   return result[0] as unknown as Admin;
 };

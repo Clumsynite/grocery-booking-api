@@ -6,8 +6,9 @@ const passwordRegexMessage =
   "Password needs to have at least one digit, one special character, one lowercase letter, one uppercase letter, and a total length between 8 and 20 characters.";
 
 // common validation
-const username = joi.string().min(3).max(12).pattern(regex.username);
-const fullname = joi.string().min(3).max(50);
+const username = joi.string().min(3).max(20).pattern(regex.username);
+const fullname = joi.string().min(3).max(60);
+const description = joi.string().min(3).max(200);
 const password = joi.string().pattern(regex.password).message(passwordRegexMessage);
 const email = joi.string().email();
 
@@ -33,6 +34,7 @@ const isDeleted = joi.object({
 export default {
   username,
   fullname,
+  description,
   password,
   email,
   uuid,

@@ -34,3 +34,9 @@ export interface PaginationParams {
 }
 
 export type requestId = string | undefined;
+
+export interface DropdownObject {
+  label: string;
+  value: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
