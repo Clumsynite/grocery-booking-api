@@ -51,8 +51,8 @@ export const getAllAdmins = async ({
   ];
   let query = knex(`${tablename} as au`)
     .select(columns)
-    .leftJoin("admin_user as cb", "au.created_by", "cb.admin_id")
-    .leftJoin("admin_user as ub", "au.updated_by", "ub.admin_id")
+    .leftJoin(`${TABLE_NAME.ADMIN} as cb`, "au.created_by", "cb.admin_id")
+    .leftJoin(`${TABLE_NAME.ADMIN} as ub`, "au.updated_by", "ub.admin_id")
     .orderBy("au.username", "asc");
 
   if (limit) query = query.limit(limit).offset(skip || 0);

@@ -47,9 +47,9 @@ export const getAllCategories = async ({
   ];
   let query = knex(`${tablename} as c`)
     .select(columns)
-    .leftJoin("admin_user as cb", "c.created_by", "cb.category_id")
-    .leftJoin("admin_user as ub", "c.updated_by", "ub.category_id")
-    .orderBy("au.username", "asc");
+    .join(`${TABLE_NAME.ADMIN} as cb`, "c.created_by", "cb.admin_id")
+    .join(`${TABLE_NAME.ADMIN} as ub`, "c.updated_by", "ub.admin_id")
+    .orderBy("c.name", "asc");
 
   if (limit) query = query.limit(limit).offset(skip || 0);
   // console.log(query.toString());

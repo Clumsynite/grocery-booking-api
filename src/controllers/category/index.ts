@@ -79,7 +79,7 @@ const updateCategory = async (req: AdminRequest, res: Response) => {
       });
     }
 
-    const updateObj = { name, updated_by: admin_id };
+    const updateObj = { name, description, updated_by: admin_id };
     const category = await categoryService.updateCategory({ category_id }, updateObj);
 
     return res.status(200).json({ status: true, message: "Category Updated Successfully", data: { category } });

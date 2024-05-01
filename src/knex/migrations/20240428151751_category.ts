@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { TABLE_NAME } from "@src/@types/database";
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable(TABLE_NAME.CATEGORY, (table) => {
+  await knex.schema.createTable(TABLE_NAME.PRODUCT, (table) => {
     table.uuid("category_id").primary();
     table.string("name").notNullable();
     table.string("description").notNullable();
@@ -13,5 +13,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTable(TABLE_NAME.CATEGORY);
+  await knex.schema.dropTable(TABLE_NAME.PRODUCT);
 }

@@ -9,7 +9,7 @@ const newCategory = Joi.object({
 const oldCategory = Joi.object({
   name: validators.fullname.required(),
   description: validators.description.required(),
-  module_id: validators.uuid.required(),
+  category_id: validators.uuid.required(),
 });
 
 export default { newCategory, oldCategory };
