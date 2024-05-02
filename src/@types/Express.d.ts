@@ -12,7 +12,7 @@ export interface AdminRequest extends Request {
   admin?: Admin;
 }
 
-export interface CustomerRequest extends Request {
+export interface UserRequest extends Request {
   user_id?: string;
   user_type?: "user";
   user?: User;

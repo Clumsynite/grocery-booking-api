@@ -3,9 +3,9 @@ import validators from "./common";
 
 const newUserValidator = Joi.object({
   email: validators.email.required(),
-  username: validators.username.required(),
   password: validators.password.required(),
   cnf_password: Joi.ref("password"),
+  full_name: validators.fullname.required(),
 }).with("password", "cnf_password");
 
 const loginValidator = Joi.object({
@@ -20,9 +20,9 @@ const updatePasswordValidator = Joi.object({
 }).with("new_password", "cnf_password");
 
 const updateUserValidation = Joi.object({
-  admin_id: validators.uuid.required(),
+  user_id: validators.uuid.required(),
   email: validators.email.required(),
-  username: validators.username.required(),
+  full_name: validators.fullname.required(),
 });
 
 export default {

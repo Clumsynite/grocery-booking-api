@@ -47,7 +47,6 @@ export const getAllAdmins = async ({
     "au.updated_at",
     "cb.username as created_by",
     "ub.username as updated_by",
-    "r.role_name",
   ];
   let query = knex(`${tablename} as au`)
     .select(columns)
