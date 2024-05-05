@@ -4,7 +4,7 @@ import { TABLE_NAME } from "../..//@types/database";
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable(TABLE_NAME.ADDRESS, (table) => {
     table.uuid("address_id").primary();
-    table.uuid("user_id").nullable().references("user_id").inTable(TABLE_NAME.USER).onDelete("restrict");
+    table.uuid("user_id").notNullable().references("user_id").inTable(TABLE_NAME.USER).onDelete("restrict");
     table.string("customer_name").notNullable();
     table.string("phone_number").notNullable();
     table.string("address_nickname").notNullable();

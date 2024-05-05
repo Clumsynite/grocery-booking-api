@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("product_id").notNullable().references("product_id").inTable(TABLE_NAME.PRODUCT).onDelete("restrict");
     table.decimal("price").notNullable();
     table.integer("qty").notNullable();
-    table.string("order_status").nullable();
+    table.string("order_status").notNullable();
     table.timestamps(false, true);
   });
 }

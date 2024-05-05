@@ -6,9 +6,7 @@ import { CartItem, TABLE_NAME } from "../@types/database";
 
 import knex from "../knex";
 
-import { PaginationParams } from "../@types/Common";
-
-const tablename = TABLE_NAME.ADDRESS;
+const tablename = TABLE_NAME.CART_ITEM;
 
 export const createCartItem = async (
   object: Partial<CartItem>,
@@ -23,42 +21,52 @@ export const createCartItem = async (
 
 export const getCartItemById = async (cart_item_id: string, { trx }: trx = {}): Promise<CartItem | null> => {
   if (!cart_item_id) throw new Error("Cart Item ID is required");
-  const query = (trx || knex)(tablename).where({ cart_item_id }).where({ is_deleted: false }).select("*").first();
-  return query;
-};
-
-export const getCartItemsForUser = async ({
-  limit,
-  skip,
-  totalRecords = false,
-  user_id,
-}: PaginationParams): Promise<Partial<CartItem>[] | count> => {
-  if (totalRecords) {
-    const countQuery = knex(tablename).select(knex.raw("count(cart_item_id) as count")).first();
-    return countQuery;
-  }
 
   const columns = [
     "p.product_id",
     "p.name",
     "p.description",
-    "p.price",
-    "p.available_stock",
+    "p.price as per_price",
+    // "p.available_stock",
     "c.name as category",
     "ci.cart_item_id",
     "ci.qty",
     "ci.created_at",
     "ci.updated_at",
+    knex.raw("ci.qty::numeric * p.price::numeric as price"),
   ];
 
-  let query = knex(`${tablename} as ci`)
+  const query = (trx || knex)(tablename)
+    .select(columns)
+    .where({ cart_item_id })
+    .join(`${TABLE_NAME.PRODUCT} as p`, "p.product_id", "ci.product_id")
+    .join(`${TABLE_NAME.CATEGORY} as c`, "c.category_id", "p.category_id")
+    .first();
+  return query;
+};
+
+export const getCartItemsForUser = async ({ user_id }: { user_id: string }): Promise<Partial<CartItem>[] | count> => {
+  const columns = [
+    "p.product_id",
+    "p.name",
+    "p.description",
+    "p.price as per_price",
+    // "p.available_stock",
+    "c.name as category",
+    "ci.cart_item_id",
+    "ci.qty",
+    "ci.created_at",
+    "ci.updated_at",
+    knex.raw("ci.qty::numeric * p.price::numeric as price"),
+  ];
+
+  const query = knex(`${tablename} as ci`)
     .select(columns)
     .where({ user_id })
     .join(`${TABLE_NAME.PRODUCT} as p`, "p.product_id", "ci.product_id")
     .join(`${TABLE_NAME.CATEGORY} as c`, "c.category_id", "p.category_id")
-    .orderBy("a.created_at", "desc");
+    .orderBy("ci.created_at", "desc");
 
-  if (limit) query = query.limit(limit).offset(skip || 0);
   // console.log(query.toString());
   return query;
 };

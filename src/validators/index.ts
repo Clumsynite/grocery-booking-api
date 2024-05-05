@@ -4,6 +4,7 @@ import category from "./category";
 import product from "./product";
 import user from "./user";
 import address from "./address";
+import cartItem from "./cartItem";
 
 export default {
   common,
@@ -12,4 +13,5 @@ export default {
   product,
   user,
   address,
+  cartItem,
 };

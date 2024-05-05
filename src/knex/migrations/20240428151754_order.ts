@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer("item_count").notNullable();
     table.string("user_instructions").nullable();
     table.string("admin_remarks").nullable();
-    table.timestamp("ordered_at").nullable().defaultTo(null);
+    table.timestamp("ordered_at").notNullable().defaultTo(knex.fn.now());
     table.timestamp("shipped_at").nullable().defaultTo(null);
     table.timestamp("out_for_delivery_at").nullable().defaultTo(null);
     table.timestamp("delivery_at").nullable().defaultTo(null);

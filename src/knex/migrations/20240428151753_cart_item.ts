@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("cart_item_id").primary();
     table.uuid("user_id").notNullable().references("user_id").inTable(TABLE_NAME.USER).onDelete("restrict");
     table.integer("qty").notNullable();
-    table.uuid("product_id").nullable().references("product_id").inTable(TABLE_NAME.PRODUCT).onDelete("restrict");
+    table.uuid("product_id").notNullable().references("product_id").inTable(TABLE_NAME.PRODUCT).onDelete("restrict");
     table.timestamps(false, true);
     table.boolean("is_deleted").defaultTo(false);
   });
