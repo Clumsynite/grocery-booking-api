@@ -163,13 +163,15 @@ const getProducts = async (req: AdminRequest, res: Response) => {
     const skip = Number(qSkip || 0) || 0;
     const category_id = String(qCategoryId || "");
 
-    const categoryExists = await categoryService.getCategoryById(category_id);
-    if (!categoryExists) {
-      return res.status(400).json({
-        status: false,
-        message: "Category not found",
-        data: null,
-      });
+    if (category_id) {
+      const categoryExists = await categoryService.getCategoryById(category_id);
+      if (!categoryExists) {
+        return res.status(400).json({
+          status: false,
+          message: "Category not found",
+          data: null,
+        });
+      }
     }
 
     const categories = (await productService.getAllProducts({ limit, skip, category_id })) as Partial<Product>[];
@@ -227,7 +229,7 @@ const deleteProduct = async (req: AdminRequest, res: Response) => {
 
     await productService.softDeleteProduct({ product_id });
 
-    return res.status(200).json({ status: true, message: `Product Deleed successfully`, data: null });
+    return res.status(200).json({ status: true, message: `Product Deleted successfully`, data: null });
   } catch (err) {
     const message = "Error while deleting product";
     logger.error(message, { err, admin_id, requestId, params, body });

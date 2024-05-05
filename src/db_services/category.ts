@@ -23,7 +23,7 @@ export const createCategory = async (
 
 export const getCategoryById = async (category_id: string, { trx }: trx = {}): Promise<Category | null> => {
   if (!category_id) throw new Error("Category ID is required");
-  const query = (trx || knex)(tablename).where({ category_id }).where({ is_deleted: false }).select("*").first();
+  const query = (trx || knex)(tablename).where({ category_id }).select("*").first();
   return query;
 };
 
@@ -81,7 +81,7 @@ export const hardDeleteCategory = async (filter: Partial<Category>, { trx }: trx
 
 export const getCategoriesForDropdown = async (): Promise<DropdownObject[]> => {
   const columns = ["category_id as value", "name as label"];
-  const query = knex(tablename).select(columns).where({ is_deleted: false }).orderBy("name", "asc");
+  const query = knex(tablename).select(columns).orderBy("name", "asc");
   // console.log(query.toString());
   return query as unknown as DropdownObject[];
 };

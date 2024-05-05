@@ -15,7 +15,7 @@ const oldProduct = Joi.object({
   category_id: validators.uuid.required(),
   price: validators.amount.required(),
   available_stock: validators.amount.integer().required(),
-  prdocut_id: validators.uuid.required(),
+  product_id: validators.uuid.required(),
 });
 
 export default { newProduct, oldProduct };

@@ -7,6 +7,7 @@ import { Category } from "../../@types/database";
 import { count } from "../../@types/Knex";
 
 import * as categoryService from "../../db_services/category";
+import * as productService from "../../db_services/product";
 import validators from "../../validators";
 
 const createCategory = async (req: AdminRequest, res: Response) => {
@@ -177,11 +178,18 @@ const deleteCategory = async (req: AdminRequest, res: Response) => {
       });
     }
 
-    // TODO: check if a product exists in category. Can delete only if no product exists
+    const products = await productService.getProductsByFilter({ category_id });
+    if (products.length) {
+      return res.status(400).json({
+        status: false,
+        message: "Category has products listed under it. Please move products to a different category.",
+        data: null,
+      });
+    }
 
     await categoryService.hardDeleteCategory({ category_id });
 
-    return res.status(200).json({ status: true, message: `Category Deleed successfully`, data: null });
+    return res.status(200).json({ status: true, message: `Category Deleted successfully`, data: null });
   } catch (err) {
     const message = "Error while deleting category";
     logger.error(message, { err, admin_id, requestId, params, body });

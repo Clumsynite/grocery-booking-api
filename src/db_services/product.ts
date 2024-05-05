@@ -41,8 +41,11 @@ export const getAllProducts = async ({
     "p.product_id",
     "p.name",
     "p.description",
+    "p.price",
+    "p.available_stock",
     "p.created_at",
     "p.updated_at",
+    "p.is_deleted",
     "cb.username as created_by",
     "ub.username as updated_by",
   ];
@@ -64,6 +67,12 @@ export const getAllProducts = async ({
 
 export const getProductByFilter = async (filter: Partial<Product>, { trx }: trx = {}): Promise<Product | null> => {
   const query = (trx || knex)(tablename).select("*").where(filter).first();
+  // console.log(query.toString());
+  return query;
+};
+
+export const getProductsByFilter = async (filter: Partial<Product>, { trx }: trx = {}): Promise<Product[]> => {
+  const query = (trx || knex)(tablename).select("*").where(filter);
   // console.log(query.toString());
   return query;
 };
