@@ -6,6 +6,7 @@ import auth from "../../middleware/userAuth";
 const router = express.Router();
 
 router.post("/signin", userCtrl.signin);
+router.post("/register", userCtrl.register);
 
 router.post("/signout", [auth], userCtrl.signout);
 

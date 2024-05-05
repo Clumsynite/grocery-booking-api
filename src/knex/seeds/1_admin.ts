@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 
 import config from "../../config";
 import validators from "../../validators/common";
-import { Admin, TABLE_NAME } from "@src/@types/database";
+import { Admin, TABLE_NAME } from "../..//@types/database";
 
 export async function seed(knex: Knex) {
   const salt = await bcrypt.genSalt(10);

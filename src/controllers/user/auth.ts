@@ -2,7 +2,7 @@ import { Response } from "express";
 import bcrypt from "bcrypt";
 import moment from "moment";
 
-import { UserRequest } from "../../@types/Express";
+import { Request, UserRequest } from "../../@types/Express";
 
 import validators from "../../validators";
 
@@ -13,7 +13,7 @@ import * as userService from "../../db_services/user";
 import helpers from "../../helpers/helper";
 import { getUserJwtToken as getJwtToken } from "../../helpers/login";
 
-const signin = async (req: UserRequest, res: Response) => {
+const signin = async (req: Request, res: Response) => {
   const { body, requestId } = req;
   const ip = helpers.getIp(req);
   try {
@@ -157,8 +157,66 @@ const updatePassword = async (req: UserRequest, res: Response) => {
   }
 };
 
+const register = async (req: Request, res: Response) => {
+  const { body, requestId } = req;
+  try {
+    const { password, email, cnf_password, full_name } = body;
+
+    const validator = validators.user.newUserValidator.validate({
+      password,
+      email,
+      cnf_password,
+      full_name,
+    });
+    if (validator.error) {
+      const message = validator.error.message;
+      logger.debug("Validation error while creating user user", { body, message, requestId });
+      return res.status(400).json({
+        status: false,
+        message,
+        data: null,
+      });
+    }
+
+    const emailExists = await userService.getUserByFilter({ email: email.toLowerCase() });
+    if (emailExists) {
+      return res.status(400).json({
+        status: false,
+        message: "Email already exists!",
+        data: null,
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const encPassword = await bcrypt.hash(password, salt);
+
+    const newUserObj = {
+      full_name: full_name,
+      password: encPassword,
+      email: email.toLowerCase(),
+    };
+
+    const user = await userService.createUser(newUserObj);
+
+    return res.status(201).json({
+      status: true,
+      message: "User created successfully.",
+      data: { ...user, password: "" },
+    });
+  } catch (err) {
+    const message = "Error while creating user user";
+    logger.error(message, { err, requestId });
+    return res.status(500).json({
+      status: false,
+      message: message,
+      data: null,
+    });
+  }
+};
+
 export default {
   signin,
   signout,
   updatePassword,
+  register,
 };
