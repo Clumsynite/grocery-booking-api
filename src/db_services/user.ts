@@ -38,7 +38,6 @@ export const getAllUsers = async ({
   }
   const columns = [
     "u.user_id",
-    "u.username",
     "u.email",
     "u.full_name",
     "u.last_login_ip",
@@ -47,7 +46,7 @@ export const getAllUsers = async ({
     "u.created_at",
     "u.updated_at",
   ];
-  let query = knex(`${tablename} as u`).select(columns).orderBy("username", "asc");
+  let query = knex(`${tablename} as u`).select(columns).orderBy("email", "asc");
 
   if (limit) query = query.limit(limit).offset(skip || 0);
   // console.log(query.toString());

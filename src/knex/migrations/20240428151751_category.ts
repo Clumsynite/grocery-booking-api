@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { TABLE_NAME } from "../..//@types/database";
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable(TABLE_NAME.PRODUCT, (table) => {
+  await knex.schema.createTable(TABLE_NAME.CATEGORY, (table) => {
     table.uuid("category_id").primary();
     table.string("name").notNullable();
     table.string("description").notNullable();

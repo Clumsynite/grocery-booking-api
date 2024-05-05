@@ -4,7 +4,7 @@ import { TABLE_NAME } from "../..//@types/database";
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable(TABLE_NAME.PRODUCT, (table) => {
     table.uuid("product_id").primary();
-    table.uuid("category_id").notNullable().references("category_id").inTable(TABLE_NAME.PRODUCT).onDelete("restrict");
+    table.uuid("category_id").notNullable().references("category_id").inTable(TABLE_NAME.CATEGORY).onDelete("restrict");
     table.string("name").notNullable();
     table.string("description").notNullable();
     table.decimal("price").notNullable();
