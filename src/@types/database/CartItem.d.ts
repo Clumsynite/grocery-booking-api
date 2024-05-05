@@ -1,5 +1,5 @@
-interface Cart {
-  cart_id: string;
+interface CartItem {
+  cart_item_id: string;
   user_id: string;
   product_id: string;
   qty: string;
@@ -7,4 +7,4 @@ interface Cart {
   updated_at: string;
 }
 
-export default Cart;
+export default CartItem;

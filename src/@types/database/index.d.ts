@@ -3,11 +3,11 @@ import User from "./User";
 import Address from "./Address";
 import Category from "./Category";
 import Product from "./Product";
-import Cart from "./Cart";
+import CartItem from "./CartItem";
 import Order from "./Order";
 import OrderItems from "./OrderItems";
 
-export { Admin, User, Address, Category, Product, Cart, Order, OrderItems };
+export { Admin, User, Address, Category, Product, CartItem, Order, OrderItems };
 
 export const enum TABLE_NAME {
   ADMIN = "admin",
@@ -15,7 +15,7 @@ export const enum TABLE_NAME {
   ADDRESS = "address",
   CATEGORY = "category",
   PRODUCT = "product",
-  CART = "cart",
+  CART_ITEM = "cart_item",
   ORDER = "order",
   ORDER_PRODUCTS = "order_products",
 }
