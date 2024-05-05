@@ -4,10 +4,12 @@ import auth from "../../middleware/userAuth";
 
 import authRouter from "./auth";
 import selfRouter from "./self";
+import addressRouter from "./address";
 
 const router = express.Router();
 
 router.use("/auth", authRouter);
 router.use("/self", [auth], selfRouter);
+router.use("/address", [auth], addressRouter);
 
 export default router;

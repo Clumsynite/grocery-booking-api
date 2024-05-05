@@ -182,6 +182,7 @@ const getProducts = async (req: AdminRequest, res: Response) => {
         limit: null,
         skip: null,
         totalRecords: true,
+        category_id,
       })) as count;
       count = Number(allProductsCount?.count);
     }

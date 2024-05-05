@@ -30,6 +30,7 @@ const isDeleted = joi.object({
   id: uuid.required(),
   is_deleted: joi.boolean().required(),
 });
+const pincode = joi.number().positive().min(100000).max(999999);
 
 export default {
   username,
@@ -44,4 +45,5 @@ export default {
   address,
   number,
   isDeleted,
+  pincode,
 };
