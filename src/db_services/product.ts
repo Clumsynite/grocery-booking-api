@@ -93,3 +93,47 @@ export const updateProduct = async (
 export const softDeleteProduct = async (filter: Partial<Product>, { trx }: trx = {}): Promise<void> => {
   return (trx || knex)(tablename).returning("*").where(filter).update({ is_deleted: true });
 };
+
+export const getProductsForUsers = async ({
+  limit,
+  skip,
+  totalRecords = false,
+  category_id,
+}: PaginationParams): Promise<Partial<Product>[] | count> => {
+  if (totalRecords) {
+    const countQuery = knex(tablename).select(knex.raw("count(product_id) as count")).first();
+    return countQuery;
+  }
+  const columns = ["p.product_id", "p.name", "p.description", "p.price", "p.available_stock", "c.name as category"];
+
+  const filter = {
+    is_deleted: false,
+    ...(category_id && { "p.category_id": category_id }),
+  };
+
+  let query = knex(`${tablename} as p`)
+    .select(columns)
+    .where(filter)
+    .join(`${TABLE_NAME.CATEGORY} as c`, "p.category_id", "c.category_id")
+    .orderBy("p.name", "asc");
+
+  if (category_id) {
+    query = query.where({ category_id });
+  }
+
+  if (limit) query = query.limit(limit).offset(skip || 0);
+  // console.log(query.toString());
+  return query;
+};
+
+export const getProductByIdForUser = async (product_id: string, { trx }: trx = {}): Promise<Product | null> => {
+  if (!product_id) throw new Error("Product ID is required");
+  const columns = ["p.product_id", "p.name", "p.description", "p.price", "p.available_stock", "c.name as category"];
+
+  const query = (trx || knex)(`${tablename} as p`)
+    .select(columns)
+    .where({ product_id, is_deleted: false })
+    .join(`${TABLE_NAME.CATEGORY} as c`, "c.category_id", "p.category_id")
+    .first();
+  return query;
+};

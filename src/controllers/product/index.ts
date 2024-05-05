@@ -174,10 +174,10 @@ const getProducts = async (req: AdminRequest, res: Response) => {
       }
     }
 
-    const categories = (await productService.getAllProducts({ limit, skip, category_id })) as Partial<Product>[];
+    const products = (await productService.getAllProducts({ limit, skip, category_id })) as Partial<Product>[];
     let count = 0;
 
-    if (categories?.length) {
+    if (products?.length) {
       const allProductsCount = (await productService.getAllProducts({
         limit: null,
         skip: null,
@@ -194,10 +194,10 @@ const getProducts = async (req: AdminRequest, res: Response) => {
       .json({
         status: true,
         message: "Products Fetched Successfully",
-        data: categories,
+        data: products,
       });
   } catch (err) {
-    const message = "Error while fetching all categories";
+    const message = "Error while fetching all products";
     logger.error(message, { err, admin_id, requestId });
     return res.status(500).json({ status: false, message, data: null });
   }
