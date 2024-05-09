@@ -14,6 +14,8 @@ import * as addressService from "../../db_services/address";
 
 import validators from "../../validators";
 import { Status } from "src/@types/Common";
+import { Order } from "src/@types/database";
+import { count } from "src/@types/Knex";
 
 const createOrder = async (req: UserRequest, res: Response) => {
   const { user_id, requestId, body } = req;
@@ -146,4 +148,71 @@ const createOrder = async (req: UserRequest, res: Response) => {
   }
 };
 
-export default { createOrder };
+const getOrders = async (req: UserRequest, res: Response) => {
+  const { user_id, requestId, query } = req;
+  try {
+    const { limit: qLimit, skip: qSkip } = query;
+    const limit = Number(qLimit || 0) || 0;
+    const skip = Number(qSkip || 0) || 0;
+
+    const orders = (await orderService.getAllOrders({ limit, skip, user_id })) as Partial<Order>[];
+    let count = 0;
+    if (orders.length) {
+      const allOrdersCount = (await orderService.getAllOrders({
+        limit: null,
+        skip: null,
+        totalRecords: true,
+        user_id,
+      })) as count;
+      count = Number(allOrdersCount?.count);
+    }
+
+    return res
+      .header("Access-Control-Expose-Headers", "x-total-count")
+      .setHeader("x-total-count", count)
+      .status(200)
+      .json({
+        status: true,
+        message: "Orders Fetched Successfully",
+        data: orders,
+      });
+  } catch (err) {
+    const message = "Error while getting orders";
+    logger.error(message, { err, user_id, requestId, query });
+    return res.status(500).json({ status: false, message, data: null });
+  }
+};
+
+const getOrderById = async (req: UserRequest, res: Response) => {
+  const { user_id, requestId, params } = req;
+  const { order_id } = params;
+  try {
+    const idValidator = validators.common.uuid.required().validate(order_id);
+    if (idValidator.error) {
+      return res.status(400).json({
+        status: false,
+        message: "Address ID is invalid",
+        data: null,
+      });
+    }
+
+    const order = await orderService.getOrderById(order_id);
+    if (!order) {
+      return res.status(400).json({
+        status: false,
+        message: "Order not found",
+        data: null,
+      });
+    }
+
+    const items = await orderItemsService.getAllOrderItems({ order_id });
+
+    return res.status(200).json({ status: false, message: "Order fetched successfully", data: { order, items } });
+  } catch (err) {
+    const message = "Error while getting order by id";
+    logger.error(message, { err, user_id, requestId, params });
+    return res.status(500).json({ status: false, message, data: null });
+  }
+};
+
+export default { createOrder, getOrders, getOrderById };
