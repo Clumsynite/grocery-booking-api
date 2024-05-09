@@ -14,7 +14,7 @@ import * as addressService from "../../db_services/address";
 
 import validators from "../../validators";
 import { Status } from "src/@types/Common";
-import { Order } from "src/@types/database";
+import { Order, OrderItems } from "src/@types/database";
 import { count } from "src/@types/Knex";
 
 const createOrder = async (req: UserRequest, res: Response) => {
@@ -215,4 +215,77 @@ const getOrderById = async (req: UserRequest, res: Response) => {
   }
 };
 
-export default { createOrder, getOrders, getOrderById };
+const cancelOrder = async (req: UserRequest, res: Response) => {
+  const { user_id, requestId, params } = req;
+  const { order_id } = params;
+  const trx = await knex.transaction();
+  try {
+    const idValidator = validators.common.uuid.required().validate(order_id);
+    if (idValidator.error) {
+      await trx.rollback();
+      return res.status(400).json({
+        status: false,
+        message: "Address ID is invalid",
+        data: null,
+      });
+    }
+
+    const order = await orderService.getOrderById(order_id, { trx });
+    if (!order) {
+      await trx.rollback();
+      return res.status(400).json({
+        status: false,
+        message: "Order not found",
+        data: null,
+      });
+    }
+
+    if (order.order_status === Status.CANCELLED) {
+      await trx.rollback();
+      return res.status(200).json({
+        status: true,
+        message: "Order already Cancelled",
+        data: null,
+      });
+    }
+
+    if (order.order_status !== Status.PENDING) {
+      await trx.rollback();
+      return res.status(400).json({
+        status: false,
+        message: "Cannot cancel a shipped order. Contact Support!",
+        data: null,
+      });
+    }
+
+    const items = await orderItemsService.getOrderItemsByFilter({ order_id }, { trx });
+    let item;
+    for (let i = 0; i < items.length; i++) {
+      item = items[i] as OrderItems;
+      const { order_item_id, qty, product_id } = item;
+      await orderItemsService.updateOrderItems({ order_item_id }, { order_status: Status.CANCELLED }, { trx });
+      const product = await productService.getProductByFilter({ product_id }, { trx });
+      if (!product) {
+        await trx.rollback();
+        return res.status(400).json({
+          status: false,
+          message: "Product not found. Contact Support!",
+          data: null,
+        });
+      }
+      const { available_stock } = product;
+      await productService.updateProduct({ product_id }, { available_stock: available_stock + qty }, { trx });
+    }
+
+    await orderService.updateOrder({ order_id }, { order_status: Status.CANCELLED }, { trx });
+    await trx.commit();
+    return res.status(200).json({ status: false, message: "Order Cancelled successfully", data: { order } });
+  } catch (err) {
+    await trx.rollback();
+    const message = "Error while cancelled order by id";
+    logger.error(message, { err, user_id, requestId, params });
+    return res.status(500).json({ status: false, message, data: null });
+  }
+};
+
+export default { createOrder, getOrders, getOrderById, cancelOrder };

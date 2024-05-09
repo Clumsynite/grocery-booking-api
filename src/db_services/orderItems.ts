@@ -31,7 +31,10 @@ export const getOrderItemsById = async (order_item_id: string, { trx }: trx = {}
   return query;
 };
 
-export const getAllOrderItems = async ({ order_id }: { order_id: string }): Promise<Partial<OrderItems>[] | count> => {
+export const getAllOrderItems = async (
+  { order_id }: { order_id: string },
+  { trx }: trx = {}
+): Promise<Partial<OrderItems>[]> => {
   const columns = [
     "oi.order_item_id",
     "p.name",
@@ -40,7 +43,7 @@ export const getAllOrderItems = async ({ order_id }: { order_id: string }): Prom
     "oi.price as per_price",
     "oi.order_status",
   ];
-  const query = knex(`${tablename} as oi`)
+  const query = (trx || knex)(`${tablename} as oi`)
     .select(columns)
     .where({ order_id })
     // .join(`${TABLE_NAME.ORDER} as o`, "o.order_id", "oi.order_id")

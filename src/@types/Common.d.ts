@@ -13,6 +13,7 @@ export const enum Status {
   OUT_FOR_DELIVERY = "out-for-delivery",
   DELIVERED = "delivered",
   RETURNED = "returned",
+  CANCELLED = "cancelled",
 }
 
 export type order_status =
@@ -20,7 +21,8 @@ export type order_status =
   | Status.SHIPPED
   | Status.OUT_FOR_DELIVERY
   | Status.DELIVERED
-  | Status.RETURNED;
+  | Status.RETURNED
+  | Status.CANCELLED;
 
 export interface PaginationParams {
   limit: number | null;
