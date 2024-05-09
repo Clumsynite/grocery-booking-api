@@ -85,3 +85,10 @@ npx knex --knexfile ./src/knexFile.ts migrate:up "filename.ts" # Add Migration
 ```bash
 npx knex --knexfile ./src/knexFile.ts seed:run +x ts ## Add seed data to db
 ```
+
+
+## Collections
+
+### [Postman](https://www.postman.com/)
+
+You can import collection in Postman from [here](/collection/Grocery%20Booking%20API.postman_collection.json) and start using the API
