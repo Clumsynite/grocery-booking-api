@@ -2,7 +2,7 @@ interface CartItem {
   cart_item_id: string;
   user_id: string;
   product_id: string;
-  qty: string;
+  qty: number;
   created_at: string;
   updated_at: string;
 }

@@ -21,6 +21,10 @@ export const createOrderItems = async (
   return result?.[0] as unknown as OrderItems;
 };
 
+export const bulkCreateOrderItems = async (object: Partial<OrderItems>[], { trx }: trx = {}) => {
+  return await (trx || knex)(tablename).returning("*").insert(object);
+};
+
 export const getOrderItemsById = async (order_item_id: string, { trx }: trx = {}): Promise<OrderItems | null> => {
   if (!order_item_id) throw new Error("Order Item ID is required");
   const query = (trx || knex)(tablename).where({ order_item_id }).select("*").first();

@@ -8,7 +8,7 @@ interface Address {
   city: string;
   state: string;
   pincode: string;
-  instructions: string| null;
+  instructions: string | null;
   created_at: string;
   updated_at: string;
   is_deleted: boolean;

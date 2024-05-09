@@ -5,6 +5,7 @@ import product from "./product";
 import user from "./user";
 import address from "./address";
 import cartItem from "./cartItem";
+import order from "./order";
 
 export default {
   common,
@@ -14,4 +15,5 @@ export default {
   user,
   address,
   cartItem,
+  order,
 };

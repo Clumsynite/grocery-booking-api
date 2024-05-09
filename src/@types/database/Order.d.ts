@@ -7,7 +7,7 @@ interface Order {
   payment_mode: payment_mode;
   order_status: order_status;
   item_count: number; // product * qty
-  user_instruction: string | null;
+  user_instructions: string | null;
   admin_remarks: string | null;
   ordered_at: string;
   shipped_at: string | null;
@@ -25,7 +25,7 @@ interface Order {
   city: string;
   state: string;
   pincode: string;
-  instructions: string;
+  instructions: string | null;
 }
 
 export default Order;
