@@ -17,5 +17,5 @@ export const enum TABLE_NAME {
   PRODUCT = "product",
   CART_ITEM = "cart_item",
   ORDER = "order",
-  ORDER_PRODUCTS = "order_products",
+  ORDER_ITEMS = "order_items",
 }

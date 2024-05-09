@@ -1,5 +1,6 @@
 import joi from "joi";
 
+import { PaymentMode, Status } from "../@types/Common";
 import regex from "./regex";
 
 const passwordRegexMessage =
@@ -32,6 +33,14 @@ const isDeleted = joi.object({
 });
 const pincode = joi.number().positive().min(100000).max(999999);
 
+const paymentMode = joi.string().valid(PaymentMode.BANK, PaymentMode.CARD, PaymentMode.CASH, PaymentMode.UPI);
+
+const status = joi
+  .string()
+  .valid(Status.DELIVERED, Status.OUT_FOR_DELIVERY, Status.PENDING, Status.RETURNED, Status.SHIPPED);
+
+
+
 export default {
   username,
   fullname,
@@ -46,4 +55,6 @@ export default {
   number,
   isDeleted,
   pincode,
+  paymentMode,
+  status
 };

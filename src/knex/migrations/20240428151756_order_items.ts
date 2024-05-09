@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { TABLE_NAME } from "../..//@types/database";
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable(TABLE_NAME.ORDER_PRODUCTS, (table) => {
+  await knex.schema.createTable(TABLE_NAME.ORDER_ITEMS, (table) => {
     table.uuid("order_item_id").primary();
     table.uuid("order_id").notNullable().references("order_id").inTable(TABLE_NAME.ORDER).onDelete("restrict");
     table.uuid("user_id").notNullable().references("user_id").inTable(TABLE_NAME.USER).onDelete("restrict");
@@ -15,5 +15,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTable(TABLE_NAME.ORDER_PRODUCTS);
+  await knex.schema.dropTable(TABLE_NAME.ORDER_ITEMS);
 }
