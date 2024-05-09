@@ -51,7 +51,20 @@ Before you begin, ensure you have the following installed:
 
 4. Rename the `.env.example` file to `.env` and customize the environment variables as needed.
 
-5. Start the server:
+
+5. Initialise Database:
+
+    ```bash
+    npm run db-init
+    ```
+
+    or
+
+    ```bash
+    yarn db-init
+    ```
+
+6. Start the server:
 
     ```bash
     npm dev
@@ -92,3 +105,17 @@ npx knex --knexfile ./src/knexFile.ts seed:run +x ts ## Add seed data to db
 ### [Postman](https://www.postman.com/)
 
 You can import collection in Postman from [here](/collection/Grocery%20Booking%20API.postman_collection.json) and start using the API
+
+## Docker
+
+If you want to containerize your application using Docker, a Dockerfile is provided. You can build the Docker image using the following commands:
+
+```bash
+docker build -t grocery-booking-api .
+```
+
+And then run the container:
+
+```bash
+docker run -p 5000:5000 --env-file ./.env -d grocery-booking-api
+```
