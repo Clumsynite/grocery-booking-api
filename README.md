@@ -27,14 +27,14 @@ Before you begin, ensure you have the following installed:
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone https://github.com/Clumsynite/qp-assessment
+    git clone https://github.com/Clumsynite/grocery-booking-api
     ```
 
 
 2. Navigate to the project directory:
 
     ```bash
-    cd qp-assessment
+    cd grocery-booking-api
     ```
 
 3. Install the dependencies:
